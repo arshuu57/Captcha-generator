@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup Form</title>
+<style>
+    /* Add some basic styling */
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .form input {
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 200px;
+    }
+    #signup-form{
+        margin-left: 508px;
+        margin-top: 39px;
+}
+    
+#captcha{
+    margin-top: 49px;
+    position: relative;
+    padding-left: 0px;
+}
+.refbtn{
+    margin-left: 72px;
+    background-color: #0060b3;
+    color: white;
+}
+#captcha-image{
+    margin-bottom: 20px;
+    margin-left: -178px;
+}
+.h1{
+    margin-left: 520px;
+}
+body{
+    background-image: url(https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg);
+}
+.main{
+    margin-top: 90px;
+
+}
+body label{
+    color: white;
+}
+.sub{
+    background-color: #ff711e;
+}
+#error-message{
+    color: white;
+    margin-left: 507px;
+    margin-top: 10px;
+}
+
+</style>
+</head>
+<body >
+
+<div class="main"><h2 class="h1">Signup Form</h2>
+<form id="signup-form" onsubmit="return validateForm()">
+    <label for="username">Username:</label>
+    <input type="text" id="username"  name="username" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email"  name="email" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password"   name="password" required>
+
+    <!-- CAPTCHA field -->
+    <label for="captcha">CAPTCHA:</label>
+    <input type="text" id="captcha"  placeholder="Enter the captcha" name="captcha" required>
+    <img src="" id="captcha-image"> <!-- CAPTCHA image will be displayed here -->
+    <button type="button" onclick="generateCaptcha()" class="refbtn">Refresh CAPTCHA</button> <!-- Button to refresh CAPTCHA -->
+
+    <button type="submit" class="sub" onclick="">Sign Up</button>
+</form>
+
+
+<div id="error-message"></div>
+</div>
+
+<script>
+function validateForm() {
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+    var captcha = document.getElementById("captcha").value;
+    var captchaValue = localStorage.getItem("captcha");
+
+    var usernameReg = /^[a-zA-Z]+$/;
+    var emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var passwordReg = /^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
+
+    if (!usernameReg.test(username)) {
+        document.getElementById("error-message").innerText = "Username must contain only characters.";
+        return false;
+    }
+
+    if (!emailReg.test(email)) {
+        document.getElementById("error-message").innerText = "Invalid email address.";
+        return false;
+    } else if (!passwordReg.test(email)) {
+        document.getElementById("error-message").innerText = "Email must contain at least 8 characters, one symbol, and one uppercase letter.";
+        return false;
+    }
+
+    if (!passwordReg.test(password)) {
+        document.getElementById("error-message").innerText = "Password must contain at least 8 characters, one symbol, and one uppercase letter.";
+        return false;
+    }
+
+    if (captcha !== captchaValue) {
+        document.getElementById("error-message").innerText = "Invalid CAPTCHA. Please try again.";
+        return false;
+    }
+
+    return alert("Your form submitted.");
+}
+
+// Function to generate CAPTCHA
+function generateCaptcha() {
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var captchaLength = 6;
+    var captcha = '';
+
+    for (var i = 0; i < captchaLength; i++) {
+        captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    // Store the CAPTCHA value in local storage for validation
+    localStorage.setItem("captcha", captcha);
+
+    // Display the CAPTCHA image
+    var captchaImage = document.getElementById("captcha-image");
+    captchaImage.src = "https://dummyimage.com/120x40/000/fff&text=" + captcha;
+}
+generateCaptcha(); // Generate CAPTCHA when the page loads
+</script>
+
+</body>
+</html>
